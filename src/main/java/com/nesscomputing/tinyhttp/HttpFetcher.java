@@ -54,10 +54,10 @@ public final class HttpFetcher implements Closeable
     private static final Logger LOG = LoggerFactory.getLogger(HttpFetcher.class);
 
     private final HttpParams params = new BasicHttpParams();
-	private final SchemeRegistry registry = new SchemeRegistry();
-	private final ClientConnectionManager connectionManager;
+    private final SchemeRegistry registry = new SchemeRegistry();
+    private final ClientConnectionManager connectionManager;
 
-	private static final Scheme HTTP_SCHEME = new Scheme("http", 80, PlainSocketFactory.getSocketFactory());
+    private static final Scheme HTTP_SCHEME = new Scheme("http", 80, PlainSocketFactory.getSocketFactory());
 
     public HttpFetcher()
     {
@@ -67,32 +67,32 @@ public final class HttpFetcher implements Closeable
     public HttpFetcher(final SSLConfig sslConfig)
     {
         params.setBooleanParameter(ClientPNames.HANDLE_REDIRECTS, true);
-		registry.register(HTTP_SCHEME);
+        registry.register(HTTP_SCHEME);
 
-		if (sslConfig != null && sslConfig.isSSLEnabled()) {
-		    try {
-		        final TrustManager [] trustManagers = new TrustManager[] { HttpsTrustManagerFactory.getTrustManager(sslConfig) };
-		        final SSLContext sslContext = SSLContext.getInstance("TLS");
-		        sslContext.init(null, trustManagers, null);
-		        final SSLSocketFactory sslSocketFactory = new SSLSocketFactory(sslContext, SSLSocketFactory.STRICT_HOSTNAME_VERIFIER);
+        if (sslConfig != null && sslConfig.isSSLEnabled()) {
+            try {
+                final TrustManager [] trustManagers = new TrustManager[] { HttpsTrustManagerFactory.getTrustManager(sslConfig) };
+                final SSLContext sslContext = SSLContext.getInstance("TLS");
+                sslContext.init(null, trustManagers, null);
+                final SSLSocketFactory sslSocketFactory = new SSLSocketFactory(sslContext, SSLSocketFactory.STRICT_HOSTNAME_VERIFIER);
 
-		        registry.register(new Scheme("https", 443, sslSocketFactory));
-		        LOG.debug("HTTPS enabled.");
-		    }
-		    catch (GeneralSecurityException ce) {
-		        throw Throwables.propagate(ce);
-		    }
+                registry.register(new Scheme("https", 443, sslSocketFactory));
+                LOG.debug("HTTPS enabled.");
+            }
+            catch (GeneralSecurityException ce) {
+                throw Throwables.propagate(ce);
+            }
             catch (IOException ioe) {
                 throw Throwables.propagate(ioe);
             }
-		}
-		else {
+        }
+        else {
             LOG.debug("HTTPS disabled.");
-		}
+        }
 
         connectionManager = new SingleClientConnManager(registry);
 
-		LOG.debug("HTTP fetcher ready.");
+        LOG.debug("HTTP fetcher ready.");
     }
 
     @Override
@@ -107,7 +107,7 @@ public final class HttpFetcher implements Closeable
        final HttpRequestBase httpRequest = new HttpGet(uri);
        final DefaultHttpClient httpClient = new DefaultHttpClient(connectionManager, params);
        // Maximum of three retries...
-		httpClient.setHttpRequestRetryHandler(new DefaultHttpRequestRetryHandler(3, false));
+        httpClient.setHttpRequestRetryHandler(new DefaultHttpRequestRetryHandler(3, false));
 
        if (login != null) {
            httpClient.setCredentialsProvider(new HttpFetcherCredentialsProvider(login, pw));
@@ -116,24 +116,24 @@ public final class HttpFetcher implements Closeable
        final HttpContentResponseHandler<T> responseHandler = new HttpContentResponseHandler<T>(converter);
 
        try {
-			final HttpContext httpContext = new BasicHttpContext();
-			final HttpResponse httpResponse = httpClient.execute(httpRequest, httpContext);
+            final HttpContext httpContext = new BasicHttpContext();
+            final HttpResponse httpResponse = httpClient.execute(httpRequest, httpContext);
 
-			try {
-			    return responseHandler.handle(httpRequest, httpResponse);
-			} finally {
-				// Make sure that the content has definitely been consumed. Otherwise,
-				// keep-alive does not work.
-				final HttpEntity entity = httpResponse.getEntity();
-				if (entity != null) {
-					Closeables.closeQuietly(entity.getContent());
-				}
-			}
-		} catch (Exception e) {
-			LOG.warn("Aborting Request!", e);
+            try {
+                return responseHandler.handle(httpRequest, httpResponse);
+            } finally {
+                // Make sure that the content has definitely been consumed. Otherwise,
+                // keep-alive does not work.
+                final HttpEntity entity = httpResponse.getEntity();
+                if (entity != null) {
+                    Closeables.closeQuietly(entity.getContent());
+                }
+            }
+        } catch (Exception e) {
+            LOG.warn("Aborting Request!", e);
 
-			httpRequest.abort();
-			throw Throwables.propagate(e);
-		}
-	}
+            httpRequest.abort();
+            throw Throwables.propagate(e);
+        }
+    }
 }
