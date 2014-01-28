@@ -26,6 +26,9 @@ import javax.net.ssl.TrustManager;
 import com.google.common.base.Throwables;
 import com.google.common.io.Closeables;
 
+import com.nesscomputing.tinyhttp.ssl.HttpsTrustManagerFactory;
+import com.nesscomputing.tinyhttp.ssl.SSLConfig;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -45,9 +48,6 @@ import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.nesscomputing.tinyhttp.ssl.HttpsTrustManagerFactory;
-import com.nesscomputing.tinyhttp.ssl.SSLConfig;
 
 public final class HttpFetcher implements Closeable
 {

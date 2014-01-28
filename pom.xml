@@ -4,27 +4,15 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.nesscomputing</groupId>
-    <artifactId>ness-oss-parent</artifactId>
-    <version>32</version>
+    <artifactId>ness-root</artifactId>
+    <version>1.0-SNAPSHOT</version>
   </parent>
-
-  <scm>
-    <connection>scm:git:git://github.com/NessComputing/components-ness-tinyhttp.git</connection>
-    <developerConnection>scm:git:git@github.com:NessComputing/components-ness-tinyhttp.git</developerConnection>
-    <url>http://github.com/NessComputing/components-ness-tinyhttp</url>
-    <tag>HEAD</tag>
-  </scm>
 
   <groupId>com.nesscomputing.components</groupId>
   <artifactId>ness-tinyhttp</artifactId>
   <name>ness-tinyhttp</name>
-  <version>1.2.2-SNAPSHOT</version>
   <packaging>jar</packaging>
   <description>A minimal HTTP/HTTPS client for loading configuration or small data files from the network.</description>
-
-  <properties>
-    <dep.jetty.version>8.1.3.v20120416</dep.jetty.version>
-  </properties>
 
   <dependencies>
     <dependency>
@@ -49,19 +37,17 @@
     
     <dependency>
       <groupId>com.google.code.findbugs</groupId>
-      <artifactId>jsr305</artifactId>
+      <artifactId>annotations</artifactId>
     </dependency>
 
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpcore</artifactId>
-      <version>4.1.4</version>
     </dependency>
 
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpclient</artifactId>
-      <version>4.1.3</version>
     </dependency>
 
     <dependency>
@@ -84,20 +70,12 @@
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
       <artifactId>jetty-server</artifactId>
-      <version>${dep.jetty.version}</version>
       <scope>test</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>org.eclipse.jetty.orbit</groupId>
-          <artifactId>javax.servlet</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
 
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
       <artifactId>jetty-security</artifactId>
-      <version>${dep.jetty.version}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
